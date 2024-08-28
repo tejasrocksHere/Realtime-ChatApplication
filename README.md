@@ -43,21 +43,3 @@ CREATE TABLE messages (
 ```
 
 Note: If you're using Supabase interface, don't forget to tick `Enable Realtime` setting after you created the table.
-
-## Setup GitHub authentication (optional)
-
-Follow instrunction [here](https://supabase.io/docs/guides/auth/auth-github)
-
-## Dev
-
-`npm run dev` to run server on port 3000
-
-## Build
-
-`npm run build` to build the react client
-
-# Demo
-
-[https://random-chat.netlify.app](https://random-chat.netlify.app/)
-
-!['demo'](https://random-chat.netlify.app/demo.png "demo")
