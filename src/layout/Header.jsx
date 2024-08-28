@@ -1,7 +1,12 @@
-import { Button, Grid, GridItem, Image, Text, Box } from "@chakra-ui/react";
+import { Button, Grid, GridItem, Image, Box, Text } from "@chakra-ui/react";
 import { FaGithub } from "react-icons/fa";
+import supabase from "../supabaseClient";
+import { useAppContext } from "../context/appContext";
+import NameForm from "./NameForm";
 
 export default function Header() {
+  const { username, setUsername, randomUsername, session } = useAppContext();
+
   return (
     <Grid
       templateColumns="max-content 1fr min-content"
@@ -17,31 +22,45 @@ export default function Header() {
         <Image src="/logo.png" height="30px" ml="2" />
       </GridItem>
 
-      <GridItem justifySelf="center" alignSelf="center">
-        <Box textAlign="center">
-          <Text fontSize="lg" fontWeight="bold">
-            <a href="https://tejas-mundhe-projects.netlify.app/">
-              {" "}
-              Tejas Mundhe 💻{" "}
-            </a>
-          </Text>
-          <Text fontSize="sm">Full Stack Developer 😎</Text>
-        </Box>
-      </GridItem>
-
-      <GridItem justifySelf="end" alignSelf="center" mr="4">
-        <Button
-          size="sm"
-          colorScheme="teal"
-          rightIcon={<FaGithub />}
-          variant="outline"
-          onClick={() =>
-            window.open("https://github.com/tejasrocksHere/", "_blank")
-          }
-        >
-          My GitHub
-        </Button>
-      </GridItem>
+      {session ? (
+        <>
+          <GridItem justifySelf="end" alignSelf="center" mr="4">
+            Welcome <strong>{username}</strong>
+          </GridItem>
+          <Button
+            marginRight="4"
+            size="sm"
+            variant="link"
+            onClick={() => {
+              const { error } = supabase.auth.signOut();
+              if (error) return console.error("error signOut", error);
+              const username = randomUsername();
+              setUsername(username);
+              localStorage.setItem("username", username);
+            }}
+          >
+            Log out
+          </Button>
+        </>
+      ) : (
+        <>
+          <GridItem justifySelf="end" alignSelf="center">
+            <NameForm username={username} setUsername={setUsername} />
+          </GridItem>
+          {/* <Button
+            size="sm"
+            marginRight="2"
+            colorScheme="teal"
+            rightIcon={<FaGithub />}
+            variant="outline"
+            onClick={() =>
+              window.open("https://github.com/tejasrocksHere/", "_blank")
+            } */}
+          {/* > */}
+          {/* GitHub
+          </Button> */}
+        </>
+      )}
     </Grid>
   );
 }
